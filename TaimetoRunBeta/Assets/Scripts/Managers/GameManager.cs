@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour {
     public GameObject Menu, GameOver, About;
 
     private int highScore;
+    private int coinManager;
 
     public GameState gameState = GameState.none;
 
@@ -47,6 +48,19 @@ public class GameManager : MonoBehaviour {
         }else{
           highScore = 0;
         }
+    }
+
+    public void verifyCoin(){
+        if (PlayerPrefs.HasKey("Coin")){
+            coinManager = PlayerPrefs.GetInt("Coin");
+        }else{
+            coinManager = 0;
+        }
+    }
+
+    public void addCoins(int coinCurrent){
+        coinManager += coinCurrent;
+        PlayerPrefs.SetInt("Coin", coinManager);
     }
 
     public void verifyHighScore(int score){
