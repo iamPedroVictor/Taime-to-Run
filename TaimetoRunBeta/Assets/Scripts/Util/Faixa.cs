@@ -11,6 +11,7 @@ public class Faixa : MonoBehaviour {
     private int numerosObstaculos;
     private Transform parentThis;
 
+
     private bool freeCreate;
     private List<Vector3> locaisPosiveis = new List<Vector3>();
 
@@ -19,7 +20,7 @@ public class Faixa : MonoBehaviour {
     void InimigosStart(){
         int inimigoIndex = Random.Range(0, inimigosArray.Length);
         int gridPosision = Random.Range(0, faixaGrid.Count);
-        Instantiate(inimigosArray[inimigoIndex], faixaGrid[gridPosision], Quaternion.identity);
+		GameObject enemy = Instantiate(inimigosArray[inimigoIndex], faixaGrid[gridPosision], Quaternion.identity) as GameObject;
 
     }
 

@@ -19,7 +19,7 @@ public class PlayerControl : MonoBehaviour
     public bool firstInput = true, isDead = false;
     public bool justJump;
     public AnimationController animationController;
-    private int scoreGame;
+    private int scoreGame; 
 
     public Faixa faixaRef;
     private int playerDistancia = 10, distanciaMinima = 6, countJump = 0;
@@ -35,8 +35,7 @@ public class PlayerControl : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update(){
         Debug.Log(faixasPass.Count);
         scoreText.text = scoreGame.ToString();
 
@@ -214,12 +213,11 @@ public class PlayerControl : MonoBehaviour
 
     }
 
-    public void checkDie()
-    {
-        if (isDead)
-        {
-            GameManager.instace.Die();
-        }
-    }
+	public void CheckDie(){
+		isDead = true;
+		gamePanel.SetActive (false);
+		GameManager.instace.Die ();
+	}
+    
 
 }

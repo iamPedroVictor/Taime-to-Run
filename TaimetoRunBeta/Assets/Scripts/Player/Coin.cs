@@ -7,6 +7,6 @@ public class Coin : MonoBehaviour {
     // Update is called once per frame
     void Update(){
 
-        this.transform.Rotate(new Vector3(0, velocidade * Time.deltaTime, 0));
+       // this.transform.Rotate(new Vector3(0, velocidade * Time.deltaTime, 0));
     }
 }

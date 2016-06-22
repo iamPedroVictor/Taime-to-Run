@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public enum GameState{
@@ -14,6 +15,9 @@ public class GameManager : MonoBehaviour {
 
     public static GameManager instace = null;
 
+	public static bool isDead;
+	public Transform localStart;
+
     public bool isRunGame = false, isGameOver = false;
 
     public GameObject player;
@@ -28,6 +32,8 @@ public class GameManager : MonoBehaviour {
     void Awake(){
         if (instace == null)
             instace = this;
+		if (instace != this)
+			Destroy (this);
         DontDestroyOnLoad(this);
         gameState = GameState.Menu;
     }
@@ -38,7 +44,18 @@ public class GameManager : MonoBehaviour {
 	
 	}
 
-    public void Die(){
+	public void retry(){
+		gameState = GameState.Menu;
+		SceneManager.LoadScene ("Main");
+		isRunGame = false;
+	}
+		
+	void ReloadScene(){
+		
+	}
+
+	public void Die(){
+		isRunGame = false;
         gameState = GameState.GameOver;
     }
 
@@ -87,8 +104,12 @@ public class GameManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
+		//if (isRunGame == false) {
+		//	isRunGame = false;
+		//}
         switch (gameState){
             case GameState.Menu:{
+				Debug.Log ("Estado menu");
                     verifyScore();
                     Menu.SetActive(true);
                     GameOver.SetActive(false);
@@ -96,11 +117,12 @@ public class GameManager : MonoBehaviour {
                     break;
                 }
             case GameState.GameOver:{
+				Debug.Log ("Estado game over");
                     verifyScore();
                     Menu.SetActive(false);
                     GameOver.SetActive(true);
                     About.SetActive(false);
-                    isRunGame = false;
+                    
                     break;
                 }
             case GameState.About:{
@@ -110,6 +132,7 @@ public class GameManager : MonoBehaviour {
                     break;
                 }
             case GameState.RunnerGame:{
+				Debug.Log ("Estado runnerGame");
                     Menu.SetActive(false);
                     GameOver.SetActive(false);
                     About.SetActive(false);
