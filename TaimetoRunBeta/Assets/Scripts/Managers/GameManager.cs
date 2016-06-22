@@ -58,6 +58,18 @@ public class GameManager : MonoBehaviour {
     public void StartGame(){
         gameState = GameState.RunnerGame;
     }
+
+	public void Credits(){
+		gameState = GameState.About;
+	}
+
+	public void Back(){
+		gameState = GameState.Menu;
+	}
+
+	public void Exit(){
+		Application.Quit();
+	}
 	
 	// Update is called once per frame
 	void FixedUpdate () {
