@@ -11,6 +11,7 @@ public class PlayerControl : MonoBehaviour {
     public Text scoreText;
 
     private List<GameObject> faixasPass = new List<GameObject>();
+    public List<Faixa> faixasT = new List<Faixa>();
 
     private Vector3 startPos, endPos;
     public bool firstInput = true, isDead = false;
@@ -18,6 +19,8 @@ public class PlayerControl : MonoBehaviour {
     public AnimationController animationController;
     private int scoreGame;
 
+    public Faixa faixaRef;
+    private int playerDistancia = 10, distanciaMinima = 6;
 
     private BoxCollider boxCollider;
 
@@ -106,25 +109,32 @@ public class PlayerControl : MonoBehaviour {
     }
 
     void checkFaixa(){
-        Debug.Log("Inicio Ponto");
         RaycastHit faixa;
         Vector3 rayPoint = new Vector3(transform.position.x, transform.position.y + 0.75f, transform.position.z);
         Ray rayHit = new Ray(rayPoint, Vector3.down);
         Debug.DrawRay(transform.position, new Vector3(0,-4,0),Color.red,2f);
         if (Physics.Raycast(rayHit, out faixa, 4)){
-            Debug.Log("Pegou algo");
             if (faixasPass.Contains(faixa.collider.gameObject) == false){
-                Debug.Log("Adicionou");
                 scoreGame++;
                 faixasPass.Add(faixa.collider.gameObject);
             }
         }
     }
 
+    void GerarFaixas(){
+        playerDistancia += 2;
+        GameObject faixas = Instantiate(faixaRef, new Vector3(1, -0.04999995f, playerDistancia), Quaternion.identity) as GameObject;
+    }
+
+    public void AdicionarFaixa(Faixa current){
+        faixasT.Add(current);
+    }
+
 	public void MoveUp(){
         animationController.rotateUp();
         if (checkJump(Vector3.forward) && gameObject.transform.position == endPos){
             endPos = new Vector3(transform.position.x, transform.position.y, transform.position.z + 2);
+            GerarFaixas();
             
         }
     }
