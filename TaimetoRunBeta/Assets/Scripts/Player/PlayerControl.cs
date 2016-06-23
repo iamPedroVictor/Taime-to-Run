@@ -145,14 +145,12 @@ public class PlayerControl : MonoBehaviour
         }
     }
 
-    void GerarFaixas()
-    {
+    void GerarFaixas(){
         playerDistancia += 2;
         GameObject faixas = Instantiate(faixaRef, new Vector3(1, -0.04999995f, playerDistancia), Quaternion.identity) as GameObject;
     }
 
-    void RemoverFaixa()
-    {
+    void RemoverFaixa(){
         countJump++;
         GameObject[] faixasTotais = GameObject.FindGameObjectsWithTag("Faixas");
         foreach (GameObject t in faixasTotais)
@@ -167,13 +165,11 @@ public class PlayerControl : MonoBehaviour
         }
     }
 
-    public void AdicionarFaixa(Faixa current)
-    {
+    public void AdicionarFaixa(Faixa current){
         faixasT.Add(current);
     }
 
-    public void MoveUp()
-    {
+    public void MoveUp(){
         animationController.rotateUp();
         if (checkJump(Vector3.forward) && gameObject.transform.position == endPos)
         {
