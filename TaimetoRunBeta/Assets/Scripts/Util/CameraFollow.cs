@@ -8,7 +8,7 @@ public class CameraFollow : MonoBehaviour {
     private float velocity = 0.5f;
     public GameObject faixaRef;
     public int playerDistancia = 10;
-    private float time = 1f;
+    private float time = 0.6f;
 
 	// Update is called once per frame
 
@@ -22,7 +22,7 @@ public class CameraFollow : MonoBehaviour {
         if(time > 0 && GameManager.instance.gameState == GameState.RunnerGame){
             time -= Time.deltaTime;
         }else if(time <= 0 && GameManager.instance.gameState == GameState.RunnerGame){
-            time = 1.1f;
+            time = 0.6f;
             CreateFaixa();
         }
 

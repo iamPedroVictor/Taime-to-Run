@@ -24,6 +24,8 @@ public class PlayerControl : MonoBehaviour
 
     private BoxCollider boxCollider;
 
+    public GameObject vikingNormal, vikingConfuso, vikingSemBarba, vikingStyle;
+
     void Start()
     {
         scoreGame = 0;
@@ -41,6 +43,10 @@ public class PlayerControl : MonoBehaviour
         scoreGame = 0;
         isDead = false;
         canMove = false;
+        vikingConfuso.SetActive(false);
+        vikingNormal.SetActive(true);
+        vikingSemBarba.SetActive(false);
+        vikingStyle.SetActive(false);
     }
 
     public void StartGamePlay(){
@@ -200,6 +206,26 @@ public class PlayerControl : MonoBehaviour
             endPos = new Vector3(transform.position.x - 2, transform.position.y, transform.position.z);
         }
 
+    }
+
+    public void ChoiseDeath(string enemy){
+        if(enemy == "Reporter" || enemy == "CameraMan"){
+            vikingConfuso.SetActive(true);
+            vikingNormal.SetActive(false);
+            vikingSemBarba.SetActive(false);
+            vikingStyle.SetActive(false);
+        }else if(enemy == "Barbeiro"){
+            vikingConfuso.SetActive(false);
+            vikingNormal.SetActive(false);
+            vikingSemBarba.SetActive(true);
+            vikingStyle.SetActive(false);
+        }else if(enemy == "Estilista"){
+            vikingConfuso.SetActive(false);
+            vikingNormal.SetActive(false);
+            vikingSemBarba.SetActive(false);
+            vikingStyle.SetActive(true);
+        }
+        CheckDie();
     }
 
 	public void CheckDie(){

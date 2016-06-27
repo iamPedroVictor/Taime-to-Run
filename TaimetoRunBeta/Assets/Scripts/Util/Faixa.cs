@@ -46,7 +46,9 @@ public class Faixa : MonoBehaviour {
                 }
             }
         }
-        Debug.Log(locaisPosiveis);
+        foreach(Vector3 i in locaisPosiveis){
+            Debug.Log("É possivel " + i + "Em: " + this.gameObject.name);
+        }
     }
 
     void CriarObstaculos(){
