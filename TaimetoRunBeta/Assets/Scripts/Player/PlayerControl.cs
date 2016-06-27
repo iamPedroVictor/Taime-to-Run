@@ -8,20 +8,18 @@ public class PlayerControl : MonoBehaviour
 
     private float lerpTime, currentLerpTime, perc = 1;
 
-    public GameObject gamePanel;
     public Text scoreText;
-    private int coinTotal;
+    public int coinTotal;
 
     private List<GameObject> faixasPass = new List<GameObject>();
     public List<Faixa> faixasT = new List<Faixa>();
 
     private Vector3 startPos, endPos;
-    public bool firstInput = true, isDead = false;
+    public bool firstInput = true, isDead = false, canMove;
     public bool justJump;
     public AnimationController animationController;
     private int scoreGame; 
 
-    public Faixa faixaRef;
     private int playerDistancia = 10, distanciaMinima = 6, countJump = 0;
 
     private BoxCollider boxCollider;
@@ -31,11 +29,35 @@ public class PlayerControl : MonoBehaviour
         scoreGame = 0;
         boxCollider = GetComponent<BoxCollider>();
         animationController = GetComponent<AnimationController>();
-        gamePanel.SetActive(true);
+    }
+
+    public void ReloadConfig(){
+        endPos = Vector3.zero;
+        startPos = Vector3.zero;
+        transform.position = Vector3.zero;
+        faixasPass.Clear();
+        faixasT.Clear();
+        playerDistancia = 10;
+        scoreGame = 0;
+        isDead = false;
+        canMove = false;
+    }
+
+    public void StartGamePlay(){
+        isDead = false;
+        canMove = true;
+        startPos = new Vector3(0, 0, 0);
     }
 
     // Update is called once per frame
     void Update(){
+
+        if (isDead)
+            return;
+
+        if (GameManager.instance.gameState != GameState.RunnerGame)
+            return;
+
         Debug.Log(faixasPass.Count);
         scoreText.text = scoreGame.ToString();
 
@@ -48,10 +70,8 @@ public class PlayerControl : MonoBehaviour
 
 
         if ((Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow) ||
-        Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.UpArrow)) && GameManager.instace.isRunGame)
-        {
-            if (perc == 1)
-            {
+        Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.UpArrow)) && GameManager.instance.gameState == GameState.RunnerGame && canMove){
+            if (perc == 1){
                 lerpTime = 1;
                 currentLerpTime = 0;
                 firstInput = true;
@@ -60,28 +80,21 @@ public class PlayerControl : MonoBehaviour
         }
 
         //Pegar a posição inicial
-        if (GameManager.instace.isRunGame)
+        if (GameManager.instance.gameState == GameState.RunnerGame)
         {
             startPos = gameObject.transform.position;
-            if (Input.GetKeyDown(KeyCode.LeftArrow) && gameObject.transform.position == endPos)
-            {
+            if (Input.GetKeyDown(KeyCode.LeftArrow) && gameObject.transform.position == endPos){
                 MoveLeft();
-                //endPos = new Vector3 (transform.position.x - 1, transform.position.y, transform.position.z);
+                
             }
-            if (Input.GetKeyDown(KeyCode.RightArrow) && gameObject.transform.position == endPos)
-            {
-                //endPos = new Vector3 (transform.position.x + 1, transform.position.y, transform.position.z);
+            if (Input.GetKeyDown(KeyCode.RightArrow) && gameObject.transform.position == endPos){
                 MoveRight();
             }
-            if (Input.GetKeyDown(KeyCode.DownArrow) && gameObject.transform.position == endPos)
-            {
-                //endPos = new Vector3 (transform.position.x, transform.position.y, transform.position.z - 1);
+            if (Input.GetKeyDown(KeyCode.DownArrow) && gameObject.transform.position == endPos){ 
                 MoveDown();
             }
-            if (Input.GetKeyDown(KeyCode.UpArrow) && gameObject.transform.position == endPos)
-            {
+            if (Input.GetKeyDown(KeyCode.UpArrow) && gameObject.transform.position == endPos){
                 MoveUp();
-                //endPos = new Vector3 (transform.position.x, transform.position.y, transform.position.z + 1);
             }
 
             if (firstInput)
@@ -140,30 +153,11 @@ public class PlayerControl : MonoBehaviour
             {
                 scoreGame++;
                 faixasPass.Add(faixa.collider.gameObject);
-                RemoverFaixa();
             }
         }
     }
 
-    void GerarFaixas(){
-        playerDistancia += 2;
-        GameObject faixas = Instantiate(faixaRef, new Vector3(1, -0.04999995f, playerDistancia), Quaternion.identity) as GameObject;
-    }
 
-    void RemoverFaixa(){
-        countJump++;
-        GameObject[] faixasTotais = GameObject.FindGameObjectsWithTag("Faixas");
-        foreach (GameObject t in faixasTotais)
-        {
-            if (t.transform.position.z == transform.position.z - 8 && countJump > 8)
-            {
-                Debug.Log("Limpou = " + countJump);
-                faixasPass.Remove(t);
-                Destroy(t);
-                countJump = 0;
-            }
-        }
-    }
 
     public void AdicionarFaixa(Faixa current){
         faixasT.Add(current);
@@ -174,7 +168,6 @@ public class PlayerControl : MonoBehaviour
         if (checkJump(Vector3.forward) && gameObject.transform.position == endPos)
         {
             endPos = new Vector3(transform.position.x, transform.position.y, transform.position.z + 2);
-            GerarFaixas();
 
         }
     }
@@ -211,8 +204,7 @@ public class PlayerControl : MonoBehaviour
 
 	public void CheckDie(){
 		isDead = true;
-		gamePanel.SetActive (false);
-		GameManager.instace.Die ();
+		GameManager.instance.Die ();
 	}
     
 

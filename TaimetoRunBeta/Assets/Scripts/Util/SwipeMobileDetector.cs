@@ -10,6 +10,7 @@ public class SwipeMobileDetector : MonoBehaviour {
 	private bool isSwipe = false;
 	private float minSwipeDist  = 50.0f;
 	private float maxSwipeTime = 0.5f;
+
 	
 	
 	// Update is called once per frame

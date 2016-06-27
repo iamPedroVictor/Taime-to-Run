@@ -19,8 +19,8 @@ public class Faixa : MonoBehaviour {
 
     void InimigosStart(){
         int inimigoIndex = Random.Range(0, inimigosArray.Length);
-        int gridPosision = Random.Range(0, faixaGrid.Count);
-		GameObject enemy = Instantiate(inimigosArray[inimigoIndex], faixaGrid[gridPosision], Quaternion.identity) as GameObject;
+        int gridPosision = Random.Range(0, this.faixaGrid.Count);
+		GameObject enemy = Instantiate(inimigosArray[inimigoIndex], this.faixaGrid[gridPosision], Quaternion.identity) as GameObject;
 
     }
 
@@ -28,6 +28,7 @@ public class Faixa : MonoBehaviour {
         faixaGrid.Clear();
         thisVector = GetComponent<Transform>().position;
         numerosObstaculos = Random.Range(0, 3);
+        int y = 0;
         for (int i = -6; i < 8; i += 2){
             faixaGrid.Add(new Vector3(i, thisVector.y, thisVector.z));
         }
@@ -61,15 +62,18 @@ public class Faixa : MonoBehaviour {
         }
     }
 
-	// Use this for initialization
-	void Start () {
+    void Awake(){
         parentThis = GetComponent<Transform>();
         int random = Random.Range(0, 100);
-        if(random > 50){
+        if (random > 50){
             freeCreate = true;
         }else{
             freeCreate = false;
         }
+    }
+
+	// Use this for initialization
+	void Start () {
         if (freeCreate && needCreate){
             GridList();
             CriarObstaculos();

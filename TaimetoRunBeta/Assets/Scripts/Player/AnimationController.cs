@@ -3,8 +3,10 @@ using System.Collections;
 
 public class AnimationController : MonoBehaviour {
 
+    [SerializeField]
 	private Animator anime;
 	public GameObject modelTarget;
+    [SerializeField]
     private PlayerControl playerControlScript;
     private Transform tf;
 
@@ -16,6 +18,14 @@ public class AnimationController : MonoBehaviour {
         tf = GetComponent<Transform>();
 	
 	}
+
+    void Update(){
+        if (playerControlScript.justJump){
+            anime.SetBool("Jump", true);
+        }else{
+            anime.SetBool("Jump", false);
+        }
+    }
 
     public void rotateRight() {
         tf.rotation = Quaternion.Euler(0, -90, 0);
@@ -30,13 +40,5 @@ public class AnimationController : MonoBehaviour {
         tf.rotation = Quaternion.Euler(0, 0, 0);
     }
 
-    // Update is called once per frame
-    void Update () {
-		if (playerControlScript.justJump) {
-			anime.SetBool ("Jump", true);
-		} else {
-			anime.SetBool ("Jump", false);
-		}
-	
-	}
+
 }

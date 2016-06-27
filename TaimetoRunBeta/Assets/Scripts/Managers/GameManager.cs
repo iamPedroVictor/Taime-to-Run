@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using System.Collections.Generic;
 
+[System.Serializable]
 public enum GameState{
     none,
     RunnerGame,
@@ -12,27 +14,26 @@ public enum GameState{
 }
 
 public class GameManager : MonoBehaviour {
+    public GameState gameState = GameState.none;
+    public static GameManager instance = null;
 
-    public static GameManager instace = null;
-
-	public static bool isDead;
 	public Transform localStart;
+    public GameObject cameraGame;
+    public Transform limp;
+    public PlayerControl playerTarget;
 
-    public bool isRunGame = false, isGameOver = false;
-
-    public GameObject player;
-
-    public GameObject Menu, GameOver, About;
+    public GameObject menuPanel, gameOverPanel, aboutPanel, gamePanel;
+    public bool isRunnerGame = false;
 
     private int highScore;
     private int coinManager;
 
-    public GameState gameState = GameState.none;
+    public Dictionary<string, string> positionsDictionary = new Dictionary<string, string>();
 
     void Awake(){
-        if (instace == null)
-            instace = this;
-		if (instace != this)
+        if (instance == null)
+            instance = this;
+		if (instance != this)
 			Destroy (this);
         DontDestroyOnLoad(this);
         gameState = GameState.Menu;
@@ -40,22 +41,30 @@ public class GameManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        
-	
-	}
+        positionsDictionary.Add("Camera", "-1.5,1.13,-0.26");
+        positionsDictionary.Add("Limp", "-1.5,1.13,-10.5");
+    }
 
 	public void retry(){
-		gameState = GameState.Menu;
-		SceneManager.LoadScene ("Main");
-		isRunGame = false;
-	}
-		
-	void ReloadScene(){
-		
+        if (!isRunnerGame){
+            gameState = GameState.RunnerGame;
+            ReloadScene();
+            playerTarget.StartGamePlay();
+        }
 	}
 
+		
+	void ReloadScene(){
+        playerTarget.ReloadConfig();
+        string[] camerPosition = positionsDictionary["Camera"].Split(',');
+        cameraGame.transform.position = new Vector3(float.Parse(camerPosition[0]), float.Parse(camerPosition[1]), float.Parse(camerPosition[2]));
+        string[] limpPosition = positionsDictionary["Limp"].Split(',');
+        limp.position = new Vector3(float.Parse(limpPosition[0]), float.Parse(limpPosition[1]), float.Parse(limpPosition[2]));
+        isRunnerGame = true;
+
+    }
+
 	public void Die(){
-		isRunGame = false;
         gameState = GameState.GameOver;
     }
 
@@ -86,8 +95,14 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    void MenuState(){
+        ReloadScene();
+    }
+
     public void StartGame(){
         gameState = GameState.RunnerGame;
+        isRunnerGame = true;
+        playerTarget.transform.position = localStart.position;
     }
 
 	public void Credits(){
@@ -98,45 +113,50 @@ public class GameManager : MonoBehaviour {
 		gameState = GameState.Menu;
 	}
 
+    public void Restart(){
+        ReloadScene();
+        StartGame();
+    }
+
 	public void Exit(){
 		Application.Quit();
 	}
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-		//if (isRunGame == false) {
-		//	isRunGame = false;
-		//}
         switch (gameState){
             case GameState.Menu:{
-				Debug.Log ("Estado menu");
                     verifyScore();
-                    Menu.SetActive(true);
-                    GameOver.SetActive(false);
-                    About.SetActive(false);
+                    menuPanel.SetActive(true);
+                    gameOverPanel.SetActive(false);
+                    aboutPanel.SetActive(false);
+                    gamePanel.SetActive(false);
+                    MenuState();
                     break;
                 }
             case GameState.GameOver:{
-				Debug.Log ("Estado game over");
+                    addCoins(playerTarget.GetComponent<PlayerControl>().coinTotal);
+                    isRunnerGame = false;
                     verifyScore();
-                    Menu.SetActive(false);
-                    GameOver.SetActive(true);
-                    About.SetActive(false);
-                    
+                    menuPanel.SetActive(false);
+                    gameOverPanel.SetActive(true);
+                    aboutPanel.SetActive(false);
+                    gamePanel.SetActive(false);
                     break;
                 }
             case GameState.About:{
-                    Menu.SetActive(false);
-                    GameOver.SetActive(false);
-                    About.SetActive(true);
+                    menuPanel.SetActive(false);
+                    gameOverPanel.SetActive(false);
+                    aboutPanel.SetActive(true);
+                    gamePanel.SetActive(false);
                     break;
                 }
             case GameState.RunnerGame:{
-				Debug.Log ("Estado runnerGame");
-                    Menu.SetActive(false);
-                    GameOver.SetActive(false);
-                    About.SetActive(false);
-                    isRunGame = true;
+                    menuPanel.SetActive(false);
+                    gameOverPanel.SetActive(false);
+                    aboutPanel.SetActive(false);
+                    gamePanel.SetActive(true);
+                    playerTarget.StartGamePlay();
                     break;
                 }
         }
