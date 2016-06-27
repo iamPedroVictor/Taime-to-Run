@@ -11,6 +11,11 @@ public class PlayerControl : MonoBehaviour
     public Text scoreText;
     public int coinTotal;
 
+	public AudioSource coin;
+	public AudioSource voice1;
+	public AudioSource voice2;
+	public AudioSource voice3;
+
     private List<GameObject> faixasPass = new List<GameObject>();
     public List<Faixa> faixasT = new List<Faixa>();
 
@@ -18,7 +23,7 @@ public class PlayerControl : MonoBehaviour
     public bool firstInput = true, isDead = false, canMove;
     public bool justJump;
     public AnimationController animationController;
-    private int scoreGame; 
+	public static int scoreGame; 
 
     private int playerDistancia = 10, distanciaMinima = 6, countJump = 0;
 
@@ -91,16 +96,48 @@ public class PlayerControl : MonoBehaviour
             startPos = gameObject.transform.position;
             if (Input.GetKeyDown(KeyCode.LeftArrow) && gameObject.transform.position == endPos){
                 MoveLeft();
+				int rand = Random.Range (1, 15);
+				if (rand == 2){
+					voice1.Play ();
+				}if (rand == 7){
+					voice2.Play ();
+				}if (rand == 14){
+					voice3.Play ();
+				}
                 
             }
             if (Input.GetKeyDown(KeyCode.RightArrow) && gameObject.transform.position == endPos){
-                MoveRight();
+				MoveRight();
+				int rand = Random.Range (1, 15);
+				if (rand == 2){
+					voice1.Play ();
+				}if (rand == 7){
+					voice2.Play ();
+				}if (rand == 14){
+					voice3.Play ();
+				}
             }
             if (Input.GetKeyDown(KeyCode.DownArrow) && gameObject.transform.position == endPos){ 
-                MoveDown();
+				MoveDown();
+				int rand = Random.Range (1, 15);
+				if (rand == 2){
+					voice1.Play ();
+				}if (rand == 7){
+					voice2.Play ();
+				}if (rand == 14){
+					voice3.Play ();
+				}
             }
             if (Input.GetKeyDown(KeyCode.UpArrow) && gameObject.transform.position == endPos){
-                MoveUp();
+				MoveUp();
+				int rand = Random.Range (1, 15);
+				if (rand == 2){
+					voice1.Play ();
+				}if (rand == 7){
+					voice2.Play ();
+				}if (rand == 14){
+					voice3.Play ();
+				}
             }
 
             if (firstInput)
@@ -135,8 +172,9 @@ public class PlayerControl : MonoBehaviour
                 Debug.DrawRay(rayPoint, direction * 2, Color.red);
                 return false;
             }else if(hit.collider.tag == "Moeda"){
-                    coinTotal++;
-                    Destroy(hit.collider.gameObject);
+				coin.Play ();
+				scoreGame += 2;
+                Destroy(hit.collider.gameObject);
             }
         }
         Debug.DrawRay(rayPoint, direction * 2, Color.green);

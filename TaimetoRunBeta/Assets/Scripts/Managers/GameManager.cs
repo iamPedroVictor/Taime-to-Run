@@ -2,6 +2,7 @@
 using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 [System.Serializable]
 public enum GameState{
@@ -22,10 +23,14 @@ public class GameManager : MonoBehaviour {
     public Transform limp;
     public PlayerControl playerTarget;
 
+	public Camera main;
     public GameObject menuPanel, gameOverPanel, aboutPanel, gamePanel;
     public bool isRunnerGame = false;
 
-    private int highScore;
+	private int highScore;
+	public Text highscoreText;
+	private int highScoreMax = 0;
+	public Text highScoreMaxText;
     private int coinManager;
 
     public Dictionary<string, string> positionsDictionary = new Dictionary<string, string>();
@@ -69,6 +74,14 @@ public class GameManager : MonoBehaviour {
     }
 
     public void verifyScore(){
+		if (PlayerControl.scoreGame >= highScoreMax) {
+			highScoreMax = PlayerControl.scoreGame;
+			highScoreMaxText.text = "Highscore: " + highScoreMax.ToString ();
+			highscoreText.text = "Current Score: " + PlayerControl.scoreGame.ToString ();
+		} else {
+			highscoreText.text = "Current Score: " + PlayerControl.scoreGame.ToString ();
+		}
+
         if (PlayerPrefs.HasKey("HighScore")){
             highScore = PlayerPrefs.GetInt("HighScore");
         }else{
@@ -145,6 +158,7 @@ public class GameManager : MonoBehaviour {
                     break;
                 }
             case GameState.About:{
+					
                     menuPanel.SetActive(false);
                     gameOverPanel.SetActive(false);
                     aboutPanel.SetActive(true);

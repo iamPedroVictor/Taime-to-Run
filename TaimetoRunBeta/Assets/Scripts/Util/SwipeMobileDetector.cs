@@ -11,7 +11,9 @@ public class SwipeMobileDetector : MonoBehaviour {
 	private float minSwipeDist  = 50.0f;
 	private float maxSwipeTime = 0.5f;
 
-	
+	public AudioSource voice1;
+	public AudioSource voice2;
+	public AudioSource voice3;
 	
 	// Update is called once per frame
 	void Update () {
@@ -54,9 +56,25 @@ public class SwipeMobileDetector : MonoBehaviour {
 						if(swipeType.x != 0.0f){
 							if(swipeType.x > 0.0f){
 								// MOVE RIGHT
+								int rand = Random.Range (1, 15);
+								if (rand == 2){
+									voice1.Play ();
+								}if (rand == 7){
+									voice2.Play ();
+								}if (rand == 14){
+									voice3.Play ();
+								}
 								BroadcastMessage("MoveRight");
 							}else{
 								// MOVE LEFT
+								int rand = Random.Range (1, 15);
+								if (rand == 2){
+									voice1.Play ();
+								}if (rand == 7){
+									voice2.Play ();
+								}if (rand == 14){
+									voice3.Play ();
+								}
 								BroadcastMessage("MoveLeft");
 							}
 						}
@@ -64,9 +82,25 @@ public class SwipeMobileDetector : MonoBehaviour {
 						if(swipeType.y != 0.0f ){
 							if(swipeType.y > 0.0f){
 								// MOVE UP
+								int rand = Random.Range (1, 15);
+								if (rand == 2){
+									voice1.Play ();
+								}if (rand == 7){
+									voice2.Play ();
+								}if (rand == 14){
+									voice3.Play ();
+								}
 								BroadcastMessage("MoveUp");
 							}else{
 								// MOVE DOWN
+								int rand = Random.Range (1, 15);
+								if (rand == 2){
+									voice1.Play ();
+								}if (rand == 7){
+									voice2.Play ();
+								}if (rand == 14){
+									voice3.Play ();
+								}
 								BroadcastMessage("MoveDown");
 							}
 						}
