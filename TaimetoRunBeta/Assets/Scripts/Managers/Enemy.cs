@@ -4,6 +4,8 @@ using System.Collections;
 public class Enemy : MonoBehaviour
 {
 
+    public bool DontDestroy = true;
+
 	public GameObject startingPoint;
 	public GameObject endingPoint;
 	public int sentido;
@@ -25,6 +27,10 @@ public class Enemy : MonoBehaviour
 
     
 	public void Update(){
+
+        if (GameManager.instance.gameState != GameState.RunnerGame &&
+            GameManager.instance.gameState != GameState.GameOver)
+            Destroy(this.gameObject);
 
 		if (sentido == 1) {
 			this.transform.position = new Vector3 (this.transform.position.x + speedRandom * Time.deltaTime / 20, 

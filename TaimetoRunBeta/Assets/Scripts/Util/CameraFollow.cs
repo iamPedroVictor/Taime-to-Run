@@ -17,6 +17,8 @@ public class CameraFollow : MonoBehaviour {
             //shouldPos = Vector3.Lerp(transform.position, target.position, Time.deltaTime * 0.5f);
             //transform.position = new Vector3(shouldPos.x, 1, shouldPos.z);
             transform.position = new Vector3(transform.position.x, 1, transform.position.z + velocity * Time.deltaTime);
+        }else{
+            playerDistancia = 10;
         }
 
         if(time > 0 && GameManager.instance.gameState == GameState.RunnerGame){
@@ -27,6 +29,7 @@ public class CameraFollow : MonoBehaviour {
         }
 
     }
+
 
     void CreateFaixa(){
         playerDistancia += 2;

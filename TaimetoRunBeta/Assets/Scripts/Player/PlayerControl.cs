@@ -42,8 +42,12 @@ public class PlayerControl : MonoBehaviour
         endPos = Vector3.zero;
         startPos = Vector3.zero;
         transform.position = Vector3.zero;
-        faixasPass.Clear();
-        faixasT.Clear();
+        foreach(Faixa i in faixasT){
+            faixasT.Remove(i);
+        }
+        foreach(GameObject g in faixasPass){
+            faixasPass.Remove(g);
+        }
         playerDistancia = 10;
         scoreGame = 0;
         isDead = false;
@@ -69,13 +73,13 @@ public class PlayerControl : MonoBehaviour
         if (GameManager.instance.gameState != GameState.RunnerGame)
             return;
 
-        Debug.Log(faixasPass.Count);
         scoreText.text = scoreGame.ToString();
 
         RaycastHit hitDown;
         Ray landingRayDown = new Ray(transform.position, Vector3.down);
         if (Physics.Raycast(landingRayDown, out hitDown, 4))
         {
+            Faixa t = hitDown.collider.gameObject.GetComponent<Faixa>();
             Debug.Log(hitDown.collider.name);
         }
 

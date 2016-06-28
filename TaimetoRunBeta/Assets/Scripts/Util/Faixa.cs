@@ -10,6 +10,7 @@ public class Faixa : MonoBehaviour {
     public bool needCreate = true;
     private int numerosObstaculos;
     private Transform parentThis;
+    public bool dontDestroy;
 
 
     private bool freeCreate;
@@ -85,5 +86,12 @@ public class Faixa : MonoBehaviour {
         }
     }
 
+    void Update(){
+        if (GameManager.instance.gameState != GameState.RunnerGame &&  !dontDestroy &&
+            GameManager.instance.gameState != GameState.GameOver)
+        {
+            Destroy(this.gameObject);
+        }
+    }
 
 }
