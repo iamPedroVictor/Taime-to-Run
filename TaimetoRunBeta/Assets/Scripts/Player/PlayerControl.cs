@@ -10,22 +10,27 @@ public class PlayerControl : MonoBehaviour
 
     public Text scoreText;
     public int coinTotal;
-
-	public AudioSource coin;
+    #region Variaveis de Som
+    public AudioSource coin;
 	public AudioSource voice1;
 	public AudioSource voice2;
 	public AudioSource voice3;
+    #endregion
 
     private List<GameObject> faixasPass = new List<GameObject>();
     public List<Faixa> faixasT = new List<Faixa>();
 
+    #region Controle do Personagem
     private Vector3 startPos, endPos;
     public bool firstInput = true, isDead = false, canMove;
     public bool justJump;
     public AnimationController animationController;
 	public static int scoreGame; 
-
     private int playerDistancia = 10, distanciaMinima = 6, countJump = 0;
+    #endregion
+
+    public GameObject gameCamera;
+    public GameObject deathCamera;
 
     private BoxCollider boxCollider;
 
@@ -36,6 +41,8 @@ public class PlayerControl : MonoBehaviour
         scoreGame = 0;
         boxCollider = GetComponent<BoxCollider>();
         animationController = GetComponent<AnimationController>();
+        deathCamera.SetActive(false);
+        gameCamera.SetActive(true);
     }
 
     public void ReloadConfig(){
@@ -52,6 +59,13 @@ public class PlayerControl : MonoBehaviour
         scoreGame = 0;
         isDead = false;
         canMove = false;
+        deathCamera.SetActive(false);
+        gameCamera.SetActive(true);
+        OriginalModel();
+
+    }
+
+    private void OriginalModel(){
         vikingConfuso.SetActive(false);
         vikingNormal.SetActive(true);
         vikingSemBarba.SetActive(false);
@@ -64,28 +78,29 @@ public class PlayerControl : MonoBehaviour
         startPos = new Vector3(0, 0, 0);
     }
 
+    public void OkPodeAcontecer(){
+        if (perc == 1){
+            lerpTime = 1;
+            currentLerpTime = 0;
+            firstInput = true;
+            justJump = true;
+        }
+    }
+
+
     // Update is called once per frame
     void Update(){
 
-        if (isDead)
+        if (isDead){
+            justJump = false;
             return;
+        }  
 
         if (GameManager.instance.gameState != GameState.RunnerGame)
             return;
 
-        scoreText.text = scoreGame.ToString();
-
-        RaycastHit hitDown;
-        Ray landingRayDown = new Ray(transform.position, Vector3.down);
-        if (Physics.Raycast(landingRayDown, out hitDown, 4))
-        {
-            Faixa t = hitDown.collider.gameObject.GetComponent<Faixa>();
-            Debug.Log(hitDown.collider.name);
-        }
-
-
         if ((Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow) ||
-        Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.UpArrow)) && GameManager.instance.gameState == GameState.RunnerGame && canMove){
+        Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.UpArrow)) && GameManager.instance.gameState == GameState.RunnerGame){
             if (perc == 1){
                 lerpTime = 1;
                 currentLerpTime = 0;
@@ -97,6 +112,8 @@ public class PlayerControl : MonoBehaviour
         //Pegar a posição inicial
         if (GameManager.instance.gameState == GameState.RunnerGame)
         {
+
+            scoreText.text = scoreGame.ToString();
             startPos = gameObject.transform.position;
             if (Input.GetKeyDown(KeyCode.LeftArrow) && gameObject.transform.position == endPos){
                 MoveLeft();
@@ -144,8 +161,7 @@ public class PlayerControl : MonoBehaviour
 				}
             }
 
-            if (firstInput)
-            {
+            if (firstInput){
                 currentLerpTime += Time.deltaTime * 5.5f;
                 perc = currentLerpTime / lerpTime;
                 transform.position = Vector3.Lerp(startPos, endPos, perc);
@@ -272,7 +288,9 @@ public class PlayerControl : MonoBehaviour
 
 	public void CheckDie(){
 		isDead = true;
-		GameManager.instance.Die ();
+        deathCamera.SetActive(true);
+        gameCamera.SetActive(false);
+        GameManager.instance.Die ();
 	}
     
 

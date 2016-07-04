@@ -7,7 +7,6 @@ public class Player : MovimentBase {
     public int scoreGame;
     public List<GameObject> faixasTotais = new List<GameObject>();
     public int coinTotal;
-    public Mesh[] meshGameStyle;
     [SerializeField]
     private MeshFilter meshFilter;
     public bool canMove;
@@ -75,34 +74,24 @@ public class Player : MovimentBase {
             canMove = false;
             return;
         }
-        StartGameplay();
 
-    }
-
-    
-    void CheckDie(string typeDeath){
-        //Faz o personagem morrer e trocar seu mesh.
-        switch (typeDeath){
-            case "CameraMan":{
-                    meshFilter.mesh = meshGameStyle[0];
-                    break;
+        if (GameManager.instance.gameState == GameState.RunnerGame){
+            startPos = transform.position;
+            if (firstInput){
+                currentLerpTime += Time.deltaTime * 5.5f;
+                perc = currentLerpTime / lerpTime;
+                transform.position = Vector3.Lerp(startPos, endPos, perc);
+                if (perc > 0.8f){
+                    perc = 1;
                 }
-            case "StyleMan":{
-                    meshFilter.mesh = meshGameStyle[1];
-                    break;
+                if (Mathf.Round(perc) == 1){
+                    justJump = false;
                 }
-            case "Barber":{
-                    meshFilter.mesh = meshGameStyle[2];
-                    break;
-                }
-            case "RanOver":{
-                    if (meshRenderer.transform.localScale.z > 0.1)
-                        meshRenderer.transform.localScale -= new Vector3(0, 0, 0.1f);
-                        break;
-                }
+            }
         }
-        isDead = true;
     }
+
+
 
     void OnTriggerEnter(Collider other){
         if(other.tag == "Moeda"){

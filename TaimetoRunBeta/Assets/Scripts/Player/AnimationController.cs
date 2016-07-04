@@ -6,6 +6,7 @@ public class AnimationController : MonoBehaviour {
     [SerializeField]
 	private Animator anime;
 	public GameObject modelTarget;
+
     [SerializeField]
     private PlayerControl playerControlScript;
     private Transform tf;
@@ -13,18 +14,22 @@ public class AnimationController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+
         playerControlScript = GetComponent<PlayerControl> ();
+
 		anime = modelTarget.GetComponent<Animator> ();
         tf = GetComponent<Transform>();
 	
 	}
 
     void Update(){
+
         if (playerControlScript.justJump){
             anime.SetBool("Jump", true);
-        }else{
+       }else{
             anime.SetBool("Jump", false);
         }
+
     }
 
     public void rotateRight() {

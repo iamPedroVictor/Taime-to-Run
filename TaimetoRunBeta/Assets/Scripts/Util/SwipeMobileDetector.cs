@@ -6,19 +6,27 @@ public class SwipeMobileDetector : MonoBehaviour {
 	
 	private float fingerStartTime  = 0.0f;
 	private Vector2 fingerStartPos = Vector2.zero;
-	
-	private bool isSwipe = false;
+
+    private bool isSwipe = false;
 	private float minSwipeDist  = 50.0f;
 	private float maxSwipeTime = 0.5f;
 
 	public AudioSource voice1;
 	public AudioSource voice2;
 	public AudioSource voice3;
+
+    public PlayerControl scriptPlayer;
+
+    void Start(){
+        scriptPlayer = GetComponent<PlayerControl>();
+    }
 	
 	// Update is called once per frame
 	void Update () {
-		
-		if (Input.touchCount > 0){
+        if (GameManager.instance.gameState != GameState.RunnerGame)
+            return;
+
+        if (Input.touchCount > 0){
 			
 			foreach (Touch touch in Input.touches)
 			{
@@ -65,7 +73,9 @@ public class SwipeMobileDetector : MonoBehaviour {
 									voice3.Play ();
 								}
 								BroadcastMessage("MoveRight");
-							}else{
+                                BroadcastMessage("OkPodeAcontecer");
+                                }
+                                else{
 								// MOVE LEFT
 								int rand = Random.Range (1, 15);
 								if (rand == 2){
@@ -76,7 +86,8 @@ public class SwipeMobileDetector : MonoBehaviour {
 									voice3.Play ();
 								}
 								BroadcastMessage("MoveLeft");
-							}
+                                BroadcastMessage("OkPodeAcontecer");
+                            }
 						}
 						
 						if(swipeType.y != 0.0f ){
@@ -91,7 +102,9 @@ public class SwipeMobileDetector : MonoBehaviour {
 									voice3.Play ();
 								}
 								BroadcastMessage("MoveUp");
-							}else{
+                                BroadcastMessage("OkPodeAcontecer");
+                              }
+                                else{
 								// MOVE DOWN
 								int rand = Random.Range (1, 15);
 								if (rand == 2){
@@ -102,7 +115,8 @@ public class SwipeMobileDetector : MonoBehaviour {
 									voice3.Play ();
 								}
 								BroadcastMessage("MoveDown");
-							}
+                                BroadcastMessage("OkPodeAcontecer");
+                           }
 						}
 						
 					}

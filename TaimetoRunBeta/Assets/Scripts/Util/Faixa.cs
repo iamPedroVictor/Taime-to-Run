@@ -22,6 +22,7 @@ public class Faixa : MonoBehaviour {
         int inimigoIndex = Random.Range(0, inimigosArray.Length);
         int gridPosision = Random.Range(0, this.faixaGrid.Count);
 		GameObject enemy = Instantiate(inimigosArray[inimigoIndex], this.faixaGrid[gridPosision], Quaternion.identity) as GameObject;
+        enemy.transform.position = this.faixaGrid[gridPosision];
 
     }
 

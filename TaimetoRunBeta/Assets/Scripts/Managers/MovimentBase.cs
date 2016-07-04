@@ -3,15 +3,12 @@ using System.Collections;
 
 public abstract class MovimentBase : MonoBehaviour {
 
-    [SerializeField]
     protected float lerpTime, currentLerpTime, perc = 1;
     protected Vector3 startPos, endPos;
     public bool firstInput = true, isDead = false, justJump;
     public GameObject targetObject;
     [SerializeField]
     protected BoxCollider boxCollider;
-    [SerializeField]
-    protected MeshRenderer meshRenderer;
     [SerializeField]
     protected Transform rayPointTransform;
     [SerializeField]
@@ -62,7 +59,7 @@ public abstract class MovimentBase : MonoBehaviour {
         if (transform.rotation != Quaternion.Euler(0, 180, 0))
             rotateUp();
         if (checkJump(Vector3.forward) && transform.position == endPos){
-            endPos = new Vector3(transform.position.x, transform.position.y, transform.position.z + 2);   
+            endPos = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z + 2);   
         }
         Move();
 
@@ -73,7 +70,7 @@ public abstract class MovimentBase : MonoBehaviour {
         if (transform.rotation != Quaternion.Euler(0, 0, 0))
             rotateDown();
         if (checkJump(Vector3.back) && transform.position == endPos){
-            endPos = new Vector3(transform.position.x, transform.position.y, transform.position.z - 2);  
+            endPos = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z - 2);  
         }
         Move();
 
@@ -85,7 +82,7 @@ public abstract class MovimentBase : MonoBehaviour {
         if (transform.rotation != Quaternion.Euler(0, 90, 0))
             rotateLeft();
         if (checkJump(Vector3.left) && transform.position == endPos){
-            endPos = new Vector3(transform.position.x - 2, transform.position.y, transform.position.z); 
+            endPos = new Vector3(this.transform.position.x - 2, this.transform.position.y, this.transform.position.z); 
         }
         Move();
 
@@ -96,7 +93,7 @@ public abstract class MovimentBase : MonoBehaviour {
         if (transform.rotation != Quaternion.Euler(0, -90, 0))
             rotateRight();
         if (checkJump(Vector3.right) && transform.position == endPos){
-            endPos = new Vector3(transform.position.x + 2, transform.position.y, transform.position.z);
+            endPos = new Vector3(this.transform.position.x + 2, this.transform.position.y, this.transform.position.z);
         }
         Move();
 
